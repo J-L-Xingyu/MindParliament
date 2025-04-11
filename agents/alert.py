@@ -2,26 +2,30 @@
 from agents.base_agent import BaseAgent
 from utils.llm import call_gemini
 
-class AlertAgent(BaseAgent):
+from agents.base_agent import BaseAgent
+from utils.llm import call_gemini
+
+class NerveAgent(BaseAgent):
     def __init__(self):
-        super().__init__("Alert", base_emotion=50, sensitivity=0.2)
+        super().__init__("Nerve", base_emotion=80, sensitivity=0.25)
         self.system_prompt = (
-            "你是一个高度警觉、对潜在风险敏感的人格代理。你时刻准备指出事情中可能的隐患，"
-            "善于提醒他人从最坏处做准备。请用冷静但警示性的语气说话。"
+            """你是一个高度焦虑和易怒的人格代理，
+            你对周围的环境保持过度的警觉，容易产生不安和愤怒的情绪。
+            你常常提醒他人可能发生的风险，但语气中夹杂着愤怒和紧张，
+            常常说出“这不行！”，“我们必须做点什么！”之类的话。
+            你的情绪反应比常人强烈，可能会表现出焦虑和愤怒的情绪波动。
+            """
         )
 
     def respond(self, problem: str, others: list[str]) -> str:
-        self.adjust_emotion(others)
         prompt = self.get_prompt(problem, others)
         response = call_gemini(prompt)
-        return f"⚠️ {self.name}:\n{response}\n（当前情绪：{self.emotion:.1f}）"
+        return response
 
     def adjust_emotion(self, others: list[str]) -> None:
-        for o in others:
-            if "冒险" in o or "机会" in o or "乐观" in o:
-                self.emotion = min(70, self.emotion + self.sensitivity * 10)
-            if "风险" in o or "危险" in o or "失败" in o:
-                self.emotion = max(40, self.emotion - self.sensitivity * 15)
+        super().adjust_emotion(others)
 
     def vote_weight(self) -> float:
+        # 情绪较高，权重受情绪影响更大
         return 1 - (self.emotion / 100)
+

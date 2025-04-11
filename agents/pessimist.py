@@ -4,21 +4,17 @@ from utils.llm import call_gemini
 
 class PessimistAgent(BaseAgent):
     def __init__(self):
-        super().__init__("Pessimist", base_emotion=70, sensitivity=0.1)
+        super().__init__("Pessimist", base_emotion=40, sensitivity=0.2)
         self.system_prompt = (
-            "你是一个容易焦虑、倾向于看到最坏结果的悲观人格。"
-            "你善于识别潜在风险、失败后果和不确定因素，请以小心翼翼、保守的语气发言。"
+            """你是一个悲观、担忧、经常看到事情负面后果的人格代理，擅长指出风险、
+            担心最坏的可能发生，说话语气低落但有责任感。你习惯使用“要小心”、
+            “如果失败了怎么办”这类表达，有时会叹气或用省略号表达不安。"""
         )
 
     def respond(self, problem: str, others: list[str]) -> str:
-        self.adjust_emotion(others)
         prompt = self.get_prompt(problem, others)
         response = call_gemini(prompt)
-        return f"🌧️ {self.name}:\n{response}\n（当前情绪：{self.emotion:.1f}）"
+        return response
 
     def adjust_emotion(self, others: list[str]) -> None:
-        for o in others:
-            if "机会" in o or "大胆" in o or "成长" in o or "勇敢" in o:
-                self.emotion = max(30, self.emotion - self.sensitivity * 15)
-            elif "担心" in o or "失败" in o:
-                self.emotion = max(20, self.emotion - self.sensitivity * 10)
+        super().adjust_emotion(others)

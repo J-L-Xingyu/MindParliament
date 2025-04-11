@@ -19,7 +19,7 @@ document.getElementById('submitBtn').addEventListener('click', async () => {
   const data = await res.json();
   chatWindow.innerHTML = '';
 
-  // 渲染发言 + 打字效果
+  // 渲染发言（多轮兼容）
   for (let i = 0; i < data.messages.length; i++) {
     const msg = data.messages[i];
     const side = i % 2 === 1 ? 'right' : 'left';
@@ -38,22 +38,22 @@ document.getElementById('submitBtn').addEventListener('click', async () => {
     await typeText(bubble, msg.opinion);
   }
 
-  // 渲染投票信息
+  // 渲染投票信息（大改版）
   const voteHTML = `
-    <div class="vote-header">📊 最终投票：</div>
-    <div class="vote-list">
-      ${data.votes.map(v => `
-        <div class="vote-card ${v.name.toLowerCase()}">
-          <div class="vote-title">${v.name}</div>
-          <div class="vote-bar">
-            <div class="vote-bar-inner" style="width:${v.weight * 25}px"></div>
-          </div>
-          <div class="vote-score">情绪 ${v.emotion} × 理性 ${v.logic} = <b>${v.weight}</b></div>
-        </div>
-      `).join('')}
-    </div>
-    <div class="final">🔚 综合建议：<strong>${data.suggestion}</strong></div>
-  `;
+  <div class="vote-header">📊 最终投票：</div>
+  <div class="vote-grid">
+    ${data.votes.map(v => `
+      <div class="vote-mini-card">
+        <div class="vote-role">${v.name}</div>
+        <div class="vote-bar emotion"><div class="vote-bar-inner" style="width:${v.emotion * 100}%"></div></div>
+        <div class="vote-bar logic"><div class="vote-bar-inner" style="width:${v.logic * 100}%"></div></div>
+        <div class="vote-mini-score">🧮 ${v.weight.toFixed(2)}</div>
+      </div>
+    `).join('')}
+  </div>
+  <div class="final">🔚 综合建议：<strong>${data.suggestion}</strong></div>
+`;
+
   voteWindow.innerHTML = voteHTML;
 
   input.disabled = false;

@@ -10,10 +10,10 @@ AGENTS = [
 ]
 
 AVATARS = {
-    "Optimist": "optimistic.png",
-    "Pessimist": "optimistic.png",
-    "Alert": "optimistic.png",
-    "Strategist": "optimistic.png"
+    "Optimist": "optimist.png",
+    "Pessimist": "optimist.png",
+    "Alert": "optimist.png",
+    "Strategist": "optimist.png"
 }
 
 COLORS = {
