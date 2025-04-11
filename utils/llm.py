@@ -16,7 +16,7 @@ def call_gemini(prompt: str, model_name="gemini-2.0-flash"):
     # 调用模型生成内容
     response = client.models.generate_content(
         model=model_name,
-        contents=prompt + "   简单表明你的观点"
+        contents=prompt + "   简单表明你的观点就行"
     )
     return response.text.strip()  # 返回生成的文本
 
