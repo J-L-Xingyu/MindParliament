@@ -1,10 +1,14 @@
 from flask import Flask, render_template, request, jsonify
 from agents.optimist import OptimistAgent
 from agents.pessimist import PessimistAgent
-from agents.alert import NerveAgent
+from agents.nerve import NerveAgent
 from agents.strategist import StrategistAgent
-from agents.realist import SighAgent
+from agents.sigh import SighAgent
 from utils.llm import call_gemini
+
+from dotenv import load_dotenv
+load_dotenv()
+
 
 app = Flask(__name__)
 

@@ -1,7 +1,7 @@
 from agents.optimist import OptimistAgent
 from agents.pessimist import PessimistAgent
-from agents.realist import SighAgent
-from agents.alert import NerveAgent
+from agents.sigh import SighAgent
+from agents.nerve import NerveAgent
 from agents.strategist import StrategistAgent
 
 
